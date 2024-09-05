@@ -2,9 +2,7 @@ struct Solution;
 
 impl Solution {
     pub fn missing_rolls(rolls: Vec<i32>, mean: i32, n: i32) -> Vec<i32> {
-        let total_rolls = rolls.len() as i32 + n;
-        let m_sum: i32 = rolls.iter().sum();
-        let n_sum = mean * total_rolls - m_sum;
+        let n_sum = mean * (rolls.len() as i32 + n) - rolls.iter().sum::<i32>();
 
         if n_sum >= n && n_sum <= 6 * n {
             let mut missing_rolls = vec![n_sum / n; n as usize];
