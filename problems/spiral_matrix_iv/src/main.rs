@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 struct Solution;
 
 // Definition for singly-linked list.
@@ -31,8 +33,35 @@ impl ListNode {
 
 impl Solution {
     pub fn spiral_matrix(m: i32, n: i32, head: Option<Box<ListNode>>) -> Vec<Vec<i32>> {
-        //println!("{head:?}");
-        vec![]
+        let mut output: Vec<Vec<i32>> = vec![vec![-1; n as usize]; m as usize];
+        let mut direction: (i32, i32) = (0, 1);
+        let mut position: (i32, i32) = (0, 0);
+        let mut current = head;
+
+        while let Some(node) = current {
+            let next = (position.0 + direction.0, position.1 + direction.1);
+            if next.0 < 0
+                || next.0 == m
+                || next.1 < 0
+                || next.1 == n
+                || output[next.0 as usize][next.1 as usize] != -1
+            {
+                direction = match direction {
+                    (0, 1) => (1, 0),
+                    (1, 0) => (0, -1),
+                    (0, -1) => (-1, 0),
+                    (-1, 0) => (0, 1),
+                    _ => unreachable!(),
+                };
+            }
+
+            output[position.0 as usize][position.1 as usize] = node.val;
+            position.0 += direction.0;
+            position.1 += direction.1;
+            current = node.next;
+        }
+
+        output
     }
 }
 
@@ -55,6 +84,14 @@ mod tests {
                 vec![5, 0, -1, -1, 1],
                 vec![5, 2, 4, 9, 7]
             ]
+        )
+    }
+
+    #[test]
+    fn testcase_2() {
+        assert_eq!(
+            Solution::spiral_matrix(1, 4, ListNode::from_vec(vec![0, 1, 2])),
+            vec![vec![0, 1, 2, -1]]
         )
     }
 }
