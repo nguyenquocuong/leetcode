@@ -2,14 +2,15 @@ struct Solution;
 
 impl Solution {
     pub fn is_circular_sentence(sentence: String) -> bool {
-        let words = sentence.split(" ").collect::<Vec<&str>>();
+        let words: Vec<&str> = sentence.split(" ").collect();
+        let n = words.len();
 
-        for (i, word) in words.iter().enumerate() {
-            if i == words.len() - 1 {
-                if word.as_bytes().last().unwrap() != words[0].as_bytes().first().unwrap() {
-                    return false;
-                }
-            } else if word.as_bytes().last().unwrap() != words[i + 1].as_bytes().first().unwrap() {
+        if words[0].as_bytes().first().unwrap() != words[n - 1].as_bytes().last().unwrap() {
+            return false;
+        }
+
+        for i in 0..n - 1 {
+            if words[i].as_bytes().last().unwrap() != words[i + 1].as_bytes().first().unwrap() {
                 return false;
             }
         }
